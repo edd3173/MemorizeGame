@@ -20,7 +20,7 @@ class EmojiMemoryGame : ObservableObject{ // oo : publish the world if something
     
     // Created once,
     private static func createMemoryGame() -> MemoryGame<String> {
-        MemoryGame<String>(numberOfPairsOfCards: emojis.count) { pairIndex in // here, pairIndex is like arg of function after IN : emojis[pariIdx]
+        MemoryGame<String>(numberOfPairsOfCards: 10) { pairIndex in // here, pairIndex is like arg of function after IN : emojis[pariIdx]
             emojis[pairIndex]
         }
     }

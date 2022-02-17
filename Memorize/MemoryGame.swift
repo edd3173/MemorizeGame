@@ -46,7 +46,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable { // CardContent is 
     }
     
     struct Card: Identifiable {
-        var isFaceUp = true
+        var isFaceUp = false
         var isMatched = false
         let content: CardContent // CardContent is a dont-care
         let id: Int // content,id is 'let', they don't change
