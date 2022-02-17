@@ -13,12 +13,14 @@ import SwiftUI
 
 class EmojiMemoryGame : ObservableObject{ // oo : publish the world if something change
     
+    typealias Card = MemoryGame<String>.Card
+    
     // Created once, global -> With static
-    static let emojis: [String] = ["⚽️","🏀","🏈","⚾️","🎱","🏓","🥋","🎸","🎲","🎮","🧩"]
+    private static let emojis: [String] = ["🚒","🚐","🛻","🚚","🚛","🚜","🛴","🚲","🛵","🏍","🛺","🚔","🚍","🚘","🚖"]
     
     // Created once,
-    static func createMemoryGame() -> MemoryGame<String> {
-        MemoryGame<String>(numberOfPairsOfCards: 4) { pairIndex in // here, pairIndex is like arg of function after IN : emojis[pariIdx]
+    private static func createMemoryGame() -> MemoryGame<String> {
+        MemoryGame<String>(numberOfPairsOfCards: emojis.count) { pairIndex in // here, pairIndex is like arg of function after IN : emojis[pariIdx]
             emojis[pairIndex]
         }
     }
@@ -27,17 +29,17 @@ class EmojiMemoryGame : ObservableObject{ // oo : publish the world if something
     // For Static Func (and initializer), need not to read like EmojiMemoryGame.createMemoryGame()
     
     // Published : If something changed, publish to world
-    @Published private var model: MemoryGame<String> = createMemoryGame()
+    @Published private var model = createMemoryGame()
     
     
-    var cards: Array<MemoryGame<String>.Card>{
+    var cards: Array<Card>{
         model.cards
     }
     
     
     // MARK: - Intent(s)
     
-    func choose(_ card: MemoryGame<String>.Card){ // now call model's func
+    func choose(_ card: Card){ // now call model's func
         model.choose(card)
     }
 }

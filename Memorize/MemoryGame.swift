@@ -12,7 +12,10 @@ import Foundation // Not import SwiftUI. This is a model
 struct MemoryGame<CardContent> where CardContent: Equatable { // CardContent is a 'dont-care' type generic, but can 'arithmetic' (by equatable)
     private(set) var cards: Array<Card>
     
-    private var indexOfTheOneAndOnlyFaceUpCard: Int? // current single faceup card
+    private var indexOfTheOneAndOnlyFaceUpCard: Int?{ // current single faceup card
+        get {cards.indices.filter({cards[$0].isFaceUp}).oneAndOnly}
+        set {cards.indices.forEach{cards[$0].isFaceUp = ($0 == newValue)}}
+    }
     
     mutating func choose(_ card: Card){ // 'mutating' will change the self struct
         if let chosenIdx = cards.firstIndex(where: { $0.id == card.id}),
@@ -24,21 +27,16 @@ struct MemoryGame<CardContent> where CardContent: Equatable { // CardContent is 
                     cards[chosenIdx].isMatched=true
                     cards[potentialMatchIdx].isMatched=true
                 }
+                cards[chosenIdx].isFaceUp=true // matched, so no oneAndOnlyFaceUpCard.
                 // Two cards are face up, so theres no single faceup
-                indexOfTheOneAndOnlyFaceUpCard = nil
             }else{ // card didn't match, so face down cards
-                for index in cards.indices{
-                    cards[index].isFaceUp = false
-                }
-                indexOfTheOneAndOnlyFaceUpCard = chosenIdx // updated.
+               indexOfTheOneAndOnlyFaceUpCard=chosenIdx
             }
-            cards[chosenIdx].isFaceUp.toggle()
-            //print("\(cards)")
         }
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent){
-        cards = Array<Card>()
+        cards = []
         // add numberOfPairsOfCards x 2 cards to cards array
         for pairIdx in 0..<numberOfPairsOfCards{
             let content = createCardContent(pairIdx)
@@ -48,9 +46,19 @@ struct MemoryGame<CardContent> where CardContent: Equatable { // CardContent is 
     }
     
     struct Card: Identifiable {
-        var isFaceUp: Bool = false
-        var isMatched: Bool = false
-        var content: CardContent // CardContent is a dont-care
-        var id: Int
+        var isFaceUp = true
+        var isMatched = false
+        let content: CardContent // CardContent is a dont-care
+        let id: Int // content,id is 'let', they don't change
+    }
+}
+
+extension Array{
+    var oneAndOnly: Element? {
+        if count == 1 {
+            return first
+        }else{
+            return nil
+        }
     }
 }
