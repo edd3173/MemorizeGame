@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+  
 struct Cardify: ViewModifier {
     var isFaceUp: Bool
     
