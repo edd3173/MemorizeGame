@@ -20,7 +20,7 @@ class EmojiMemoryGame : ObservableObject{ // oo : publish the world if something
     
     // Created once,
     private static func createMemoryGame() -> MemoryGame<String> {
-        MemoryGame<String>(numberOfPairsOfCards: 10) { pairIndex in // here, pairIndex is like arg of function after IN : emojis[pariIdx]
+        MemoryGame<String>(numberOfPairsOfCards: 8) { pairIndex in // here, pairIndex is like arg of function after IN : emojis[pariIdx]
             emojis[pairIndex]
         }
     }
@@ -41,5 +41,13 @@ class EmojiMemoryGame : ObservableObject{ // oo : publish the world if something
     
     func choose(_ card: Card){ // now call model's func
         model.choose(card)
+    }
+    
+    func shuffle(){
+        model.shuffle()
+    }
+    
+    func restart(){
+        model = EmojiMemoryGame.createMemoryGame()
     }
 }
